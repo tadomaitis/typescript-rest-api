@@ -37,3 +37,7 @@ if (!process.env.DEBUG) {
 
 // initialize the logger with the configuration above
 app.use(expressWinston.logger(loggerOptions))
+
+// here we are adding the UserRoutes to our array,
+// after sending the Express.js application object to have the routes added to our app!
+routes.push(new UsersRoutes(app))
