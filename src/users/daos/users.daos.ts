@@ -67,6 +67,14 @@ class UsersDao {
   //That would mean it would silently ignore values for fields
   // that are part of the DTO-defined model but hadn’t been saved
   // to before for this particular object instance.
+
+  async removeUserById (userId: string) {
+    const objIndex = this.users.findIndex(
+      (obj: { id: string }) => obj.id === userId
+    )
+    this.users.splice(objIndex, 1)
+    return `${userId} removed`
+  }
 }
 
 export default new UsersDao()
