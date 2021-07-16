@@ -1,4 +1,4 @@
-export interface PuteUserDto {
+export interface PutUserDto {
   id: string
   email: string
   password: string
