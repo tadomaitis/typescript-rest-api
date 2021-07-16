@@ -19,3 +19,21 @@ app.use(express.json())
 
 // middleware to allow cross-origin requests
 app.use(cors())
+
+// here we are preparing the expressWinston logging middleware configuration,
+// which will automatically log all HTTP requests handled by Express.js
+const loggerOptions: expressWinston.LoggerOptions = {
+  transports: [new winston.transports.Console()],
+  format: winston.format.combine(
+    winston.format.json(),
+    winston.format.prettyPrint(),
+    winston.format.colorize({ all: true })
+  )
+}
+
+if (!process.env.DEBUG) {
+  loggerOptions.meta = false // when not debugging, log requests as one-liners
+}
+
+// initialize the logger with the configuration above
+app.use(expressWinston.logger(loggerOptions))
