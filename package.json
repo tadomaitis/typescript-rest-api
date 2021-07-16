@@ -2,5 +2,12 @@
   "name": "typescript-rest-api",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "debug": "^4.3.2",
+    "express": "^4.17.1",
+    "express-winston": "^4.1.0",
+    "winston": "^3.3.3"
+  }
 }
