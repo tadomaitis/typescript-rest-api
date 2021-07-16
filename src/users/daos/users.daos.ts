@@ -13,6 +13,12 @@ class UsersDao {
   constructor () {
     log('Created new instance of UsersDao')
   }
+
+  async addUser (user: CreateUserDto) {
+    user.id = shortid.generate()
+    this.users.push(user)
+    return user.id
+  }
 }
 
 export default new UsersDao()
