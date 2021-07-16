@@ -13,3 +13,9 @@ const server: http.Server = http.createServer(app)
 const port = 3000
 const routes: Array<CommonRoutesConfig> = []
 const debugLog: debug.IDebugger = debug('app')
+
+// middleware to parse all incoming requests as JSON
+app.use(express.json())
+
+// middleware to allow cross-origin requests
+app.use(cors())
