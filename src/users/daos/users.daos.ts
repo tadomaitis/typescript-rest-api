@@ -36,6 +36,10 @@ class UsersDao {
     return `${user.id} updated via put`
   }
 
+  // putUserById() has a bug. It will let API consumers store
+  // values for fields that are not part of the model defined by our DTO.
+  // It will be properly addressed in future
+
   async patchUserById (userId: string, user: PatchUserDto) {
     const objIndex = this.users.findIndex(
       (obj: { id: string }) => obj.id === userId
@@ -56,6 +60,13 @@ class UsersDao {
     this.users.splice(objIndex, 1, currentUser)
     return `${user.id} patched`
   }
+
+  // patchUserById() depends on a duplicate list of field names
+  // that must be kept in sync with the model. Without this, it
+  // would have to use the object being updated for this list.
+  //That would mean it would silently ignore values for fields
+  // that are part of the DTO-defined model but hadn’t been saved
+  // to before for this particular object instance.
 }
 
 export default new UsersDao()
