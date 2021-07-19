@@ -68,6 +68,11 @@ class UsersMiddleware {
       res.status(404).send({ error: `User ${req.params.userId} not found` })
     }
   }
+
+  async extractUserId (req: Request, res: Response, next: NextFunction) {
+    req.body.id = req.params.userId
+    next()
+  }
 }
 
 export default new UsersMiddleware()
