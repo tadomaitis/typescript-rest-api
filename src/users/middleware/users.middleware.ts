@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import userService from '../services/users.service'
 import debug from 'debug'
-import { error } from 'winston'
 
 const log: debug.IDebugger = debug('app:users-controller')
 
