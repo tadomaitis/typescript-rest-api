@@ -1,6 +1,7 @@
 import { CreateUserDto } from '../dto/create.user.dto'
 import { PutUserDto } from '../dto/put.user.dto'
 import { PatchUserDto } from '../dto/patch.user.dto'
+import mongooseService from '../../common/services/mongoose.service'
 
 import shortid from 'shortid'
 import debug from 'debug'
@@ -8,83 +9,29 @@ import debug from 'debug'
 const log: debug.IDebugger = debug('app:in-memory-dao')
 
 class UsersDao {
-  users: Array<CreateUserDto> = []
+  Schema = mongooseService.getMongoose().Schema
+
+  userSchema = new this.Schema({
+    _id: String,
+    email: String,
+    password: { type: String, select: false },
+    firstName: String,
+    lastName: String,
+    permissionFlags: Number,
+  }, { id: false })
+
+  // the 'select: false' option in password fiel will hide this field whenever
+  // we get a user or lsit all users
+
+  // user schema probably looks familiar because it’s similar to our DTO
+  // entities. The main difference is that we are defining which fields should
+  // exist in our MongoDB collection called Users, while the DTO entities
+  // defines which fields to accept in an HTTP request.
+
+  User = mongooseService.getMongoose().model('Users', this.userSchema)
 
   constructor () {
     log('Created new instance of UsersDao')
-  }
-
-  async addUser (user: CreateUserDto) {
-    user.id = shortid.generate()
-    this.users.push(user)
-    return user.id
-  }
-
-  async getUsers () {
-    return this.users
-  }
-
-  async getUserById (userId: string) {
-    return this.users.find((user: { id: string }) => user.id === userId)
-  }
-
-  async putUserById (userId: string, user: PutUserDto) {
-    const objIndex = this.users.findIndex(
-      (obj: { id: string }) => obj.id === userId
-    )
-    this.users.splice(objIndex, 1, user)
-    return `${user.id} updated via put`
-  }
-
-  // putUserById() has a bug. It will let API consumers store
-  // values for fields that are not part of the model defined by our DTO.
-  // It will be properly addressed in future
-
-  async patchUserById (userId: string, user: PatchUserDto) {
-    const objIndex = this.users.findIndex(
-      (obj: { id: string }) => obj.id === userId
-    )
-    let currentUser = this.users[objIndex]
-    const allowedPatchFields = [
-      'password',
-      'firstName',
-      'lastName',
-      'permissionLevel'
-    ]
-    for (let field of allowedPatchFields) {
-      if (field in user) {
-        // @ts-ignore
-        currentUser[field] = user[field]
-      }
-    }
-    this.users.splice(objIndex, 1, currentUser)
-    return `${user.id} patched`
-  }
-
-  // patchUserById() depends on a duplicate list of field names
-  // that must be kept in sync with the model. Without this, it
-  // would have to use the object being updated for this list.
-  //That would mean it would silently ignore values for fields
-  // that are part of the DTO-defined model but hadn’t been saved
-  // to before for this particular object instance.
-
-  async removeUserById (userId: string) {
-    const objIndex = this.users.findIndex(
-      (obj: { id: string }) => obj.id === userId
-    )
-    this.users.splice(objIndex, 1)
-    return `${userId} removed`
-  }
-
-  async getUserByEmail (email: string) {
-    const objIndex = this.users.findIndex(
-      (obj: { email: string }) => obj.email === email
-    )
-    let currentUser = this.users[objIndex]
-    if (currentUser) {
-      return currentUser
-    }
-    return null
   }
 }
 
