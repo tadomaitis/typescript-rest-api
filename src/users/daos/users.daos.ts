@@ -11,14 +11,17 @@ const log: debug.IDebugger = debug('app:in-memory-dao')
 class UsersDao {
   Schema = mongooseService.getMongoose().Schema
 
-  userSchema = new this.Schema({
-    _id: String,
-    email: String,
-    password: { type: String, select: false },
-    firstName: String,
-    lastName: String,
-    permissionFlags: Number,
-  }, { id: false })
+  userSchema = new this.Schema(
+    {
+      _id: String,
+      email: String,
+      password: { type: String, select: false },
+      firstName: String,
+      lastName: String,
+      permissionFlags: Number
+    },
+    { id: false }
+  )
 
   // the 'select: false' option in password fiel will hide this field whenever
   // we get a user or lsit all users
@@ -32,6 +35,17 @@ class UsersDao {
 
   constructor () {
     log('Created new instance of UsersDao')
+  }
+
+  async addUser (userFields: CreateUserDto) {
+    const userId = shortid.generate()
+    const user = new this.User({
+      _id: userId,
+      ...userFields,
+      permissionFlags: 1
+    })
+    await user.save()
+    return userId
   }
 }
 
