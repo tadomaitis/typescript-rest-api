@@ -47,6 +47,23 @@ class UsersDao {
     await user.save()
     return userId
   }
+
+  async getUserByEmail (email: string) {
+    return this.User.findOne({ email: email }).exec()
+  }
+
+  async getUserById (userId: string) {
+    return this.User.findOne({ id: userId })
+      .populate('User')
+      .exec()
+  }
+
+  async getUsers (limit = 25, page = 0) {
+    return this.User.find()
+      .limit(limit)
+      .skip(limit * page)
+      .exec()
+  }
 }
 
 export default new UsersDao()
