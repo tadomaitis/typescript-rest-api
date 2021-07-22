@@ -53,7 +53,7 @@ class UsersDao {
   }
 
   async getUserById (userId: string) {
-    return this.User.findOne({ id: userId })
+    return this.User.findOne({ _id: userId })
       .populate('User')
       .exec()
   }
