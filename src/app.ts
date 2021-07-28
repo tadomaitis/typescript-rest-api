@@ -1,3 +1,7 @@
+import dotenv from 'dotenv'
+const dotenvResult = dotenv.config()
+if (dotenvResult.error) throw dotenvResult.error
+
 import express from 'express'
 import * as http from 'http'
 
