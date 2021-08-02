@@ -2,7 +2,7 @@ import { CommonRoutesConfig } from '../common/common.routes.config'
 import UsersController from './controllers/users.controller'
 import UsersMiddleware from './middleware/users.middleware'
 import { Application } from 'express'
-import BodyValidationMiddleware from '../common/middlware/body.validation.middleware'
+import BodyValidationMiddleware from '../common/middleware/body.validation.middleware'
 import { body } from 'express-validator'
 
 export class UsersRoutes extends CommonRoutesConfig {

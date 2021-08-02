@@ -3,7 +3,7 @@ import authController from './controller/auth.controller'
 import authMiddleware from './middleware/auth.middleware'
 import jwtMiddleware from './middleware/jwt.middleware'
 import { Application } from 'express'
-import BodyValidationMiddleware from '../common/middlware/body.validation.middleware'
+import BodyValidationMiddleware from '../common/middleware/body.validation.middleware'
 import { body } from 'express-validator'
 
 export class AuthRoutes extends CommonRoutesConfig {
